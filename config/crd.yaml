@@ -194,6 +194,9 @@ metadata:
   name: db-operator-leader-election-role
   namespace: db-operator-system
 rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["*"]
 - apiGroups:
   - ""
   resources:
