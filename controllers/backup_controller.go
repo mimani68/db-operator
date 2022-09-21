@@ -20,10 +20,8 @@ import (
 	"context"
 	"encoding/json"
 
-	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
@@ -72,32 +70,47 @@ func (r *BackupReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 	// found := &appsv1.Deployment{}
 	// svc := &corev1.Service{}
 
-	command := []string{"xenoncli", "raft", "status"}
-	// status := corev1.ConditionUnknown
-	executor, err := internal.NewPodExecutor()
-	if err != nil {
-		r.Log.Error(err, err.Error())
-	}
+	// //
+	// // Exec sample
+	// //
+	// command := []string{"uname", "-a"}
+	// // status := corev1.ConditionUnknown
+	// executor, err := exec.NewPodExecutor()
+	// if err != nil {
+	// 	r.Log.Error(err, err.Error())
+	// }
 
-	stdout, stderr, err := executor.Exec(namespace, podName, "xenon", command...)
-	if err != nil {
-		r.Log.Error(err, err.Error())
-	}
+	// stdout, stderr, err := executor.Exec("echo", "echo-57cd9f4f98-7c2v7", "", command...)
+	// if err != nil {
+	// 	r.Log.Error(err, err.Error())
+	// }
+	// if stderr != nil {
+	// 	r.Log.Error(nil, string(stderr))
+	// }
+	// r.Log.Info(string(stdout))
 
-	pod := &corev1.Pod{}
-	err = r.Get(ctx, types.NamespacedName{
-		Name:      "echo-57cd9f4f98-7c2v7",
-		Namespace: "echo",
-	}, pod)
+	//
+	//
+	// === Get pods ===
+	//
+	//
+	// pod := &corev1.Pod{}
+	// err = r.Get(ctx, types.NamespacedName{
+	// 	Name:      "echo-57cd9f4f98-7c2v7",
+	// 	Namespace: "echo",
+	// }, pod)
 
-	r.Log.Info("Get pods of \"echo\" namespace")
-	if err != nil && errors.IsNotFound(err) {
-		r.Log.Error(err, err.Error())
-	} else {
-		value, _ := json.Marshal(pod)
-		r.Log.Info(string(value))
-	}
+	// r.Log.Info("Get pods of \"echo\" namespace")
+	// if err != nil && errors.IsNotFound(err) {
+	// 	r.Log.Error(err, err.Error())
+	// } else {
+	// 	value, _ := json.Marshal(pod)
+	// 	r.Log.Info(string(value))
+	// }
 
+	//
+	// === X ===
+	//
 	// // Check if the deployment already exists, if not create a new one
 	// found := &appsv1.Deployment{}
 	// err = r.Get(ctx, req.NamespacedName, found)
