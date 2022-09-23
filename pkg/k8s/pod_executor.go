@@ -1,4 +1,4 @@
-package exec
+package k8s
 
 import (
 	"bufio"
@@ -9,7 +9,6 @@ import (
 	"k8s.io/client-go/kubernetes/scheme"
 	corev1client "k8s.io/client-go/kubernetes/typed/core/v1"
 	"k8s.io/client-go/rest"
-	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/tools/remotecommand"
 )
 
@@ -19,22 +18,9 @@ type PodExecutor struct {
 }
 
 func NewPodExecutor() (*PodExecutor, error) {
-	// Instantiate loader for kubeconfig file.
-	kubeconfig := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
-		clientcmd.NewDefaultClientConfigLoadingRules(),
-		&clientcmd.ConfigOverrides{},
-	)
-
-	// Get a rest.Config from the kubeconfig file.  This will be passed into all
-	// the client objects we create.
-	config, err := kubeconfig.ClientConfig()
+	client, config, err := ClientGenerator()
 	if err != nil {
-		return nil, err
-	}
-
-	// Create a Kubernetes core/v1 client.
-	client, err := corev1client.NewForConfig(config)
-	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 

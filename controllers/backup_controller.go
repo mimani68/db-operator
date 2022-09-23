@@ -27,6 +27,7 @@ import (
 
 	"github.com/go-logr/logr"
 	opsv1alpha1 "github.com/mimani68/db-operator/api/v1alpha1"
+	"github.com/mimani68/db-operator/controllers/backup"
 )
 
 // BackupReconciler reconciles a Backup object
@@ -67,33 +68,19 @@ func (r *BackupReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		}
 	}
 
-	// found := &appsv1.Deployment{}
-	// svc := &corev1.Service{}
-
-	// //
-	// // Exec sample
-	// //
-	// command := []string{"uname", "-a"}
-	// // status := corev1.ConditionUnknown
-	// executor, err := exec.NewPodExecutor()
-	// if err != nil {
-	// 	r.Log.Error(err, err.Error())
-	// }
-
-	// stdout, stderr, err := executor.Exec("echo", "echo-57cd9f4f98-7c2v7", "", command...)
-	// if err != nil {
-	// 	r.Log.Error(err, err.Error())
-	// }
-	// if stderr != nil {
-	// 	r.Log.Error(nil, string(stderr))
-	// }
-	// r.Log.Info(string(stdout))
+	if dbBackup.Spec.CronJobOfBackup != "" {
+		backup.SchedualBackup(dbBackup.Spec.Type, dbBackup.Spec.DbConnectionUrl, r.Log)
+	} else {
+		backup.ImidiateBackup(dbBackup.Spec.Type, dbBackup.Spec.DbConnectionUrl, r.Log)
+	}
 
 	//
 	//
 	// === Get pods ===
 	//
 	//
+	// found := &appsv1.Deployment{}
+	// svc := &corev1.Service{}
 	// pod := &corev1.Pod{}
 	// err = r.Get(ctx, types.NamespacedName{
 	// 	Name:      "echo-57cd9f4f98-7c2v7",
